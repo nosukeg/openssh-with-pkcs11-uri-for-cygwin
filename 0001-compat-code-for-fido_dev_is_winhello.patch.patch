@@ -1,0 +1,12 @@
+diff -up 0001-compat-code-for-fido_dev_is_winhello.patch.orig 0001-compat-code-for-fido_dev_is_winhello.patch
+--- 0001-compat-code-for-fido_dev_is_winhello.patch.orig	2022-09-26 13:07:14.906513200 +0900
++++ 0001-compat-code-for-fido_dev_is_winhello.patch	2022-09-26 13:08:09.388030000 +0900
+@@ -13,7 +13,7 @@ diff --git a/configure.ac b/configure.ac
+ index 17fb1e609fbd..473dc38e374a 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -3235,6 +3235,7 @@ if test "x$enable_sk" = "xyes" -a "x$enable_sk_internal" = "xyes" ; then
++@@ -3280,6 +3280,7 @@ if test "x$enable_sk" = "xyes" -a "x$enable_sk_internal" = "xyes" ; then
+  		fido_dev_get_touch_begin \
+  		fido_dev_get_touch_status \
+  		fido_dev_supports_cred_prot \

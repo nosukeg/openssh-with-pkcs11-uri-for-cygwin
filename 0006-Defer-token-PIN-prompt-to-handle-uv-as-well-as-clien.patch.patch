@@ -1,0 +1,30 @@
+diff -up 0006-Defer-token-PIN-prompt-to-handle-uv-as-well-as-clien.patch.orig 0006-Defer-token-PIN-prompt-to-handle-uv-as-well-as-clien.patch
+--- 0006-Defer-token-PIN-prompt-to-handle-uv-as-well-as-clien.patch.orig	2022-09-26 13:07:40.137762300 +0900
++++ 0006-Defer-token-PIN-prompt-to-handle-uv-as-well-as-clien.patch	2022-09-26 13:08:37.851110800 +0900
+@@ -22,7 +22,7 @@ diff --git a/ssh-keygen.c b/ssh-keygen.c
+ index d4b7f4dcf800..da4027e9bc15 100644
+ --- a/ssh-keygen.c
+ +++ b/ssh-keygen.c
+-@@ -3241,7 +3241,7 @@ usage(void)
++@@ -3244,7 +3244,7 @@ usage(void)
+  int
+  main(int argc, char **argv)
+  {
+@@ -31,7 +31,7 @@ index d4b7f4dcf800..da4027e9bc15 100644
+  	char *rr_hostname = NULL, *ep, *fp, *ra;
+  	struct sshkey *private, *public;
+  	struct passwd *pw;
+-@@ -3751,13 +3751,6 @@ main(int argc, char **argv)
++@@ -3761,13 +3761,6 @@ main(int argc, char **argv)
+  		}
+  		if ((attest = sshbuf_new()) == NULL)
+  			fatal("sshbuf_new failed");
+@@ -45,7 +45,7 @@ index d4b7f4dcf800..da4027e9bc15 100644
+  		for (i = 0 ; ; i++) {
+  			fflush(stdout);
+  			r = sshsk_enroll(type, sk_provider, sk_device,
+-@@ -3773,7 +3766,7 @@ main(int argc, char **argv)
++@@ -3783,7 +3776,7 @@ main(int argc, char **argv)
+  				freezero(passphrase, strlen(passphrase));
+  				passphrase = NULL;
+  			}
