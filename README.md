@@ -1,5 +1,6 @@
-<div style="text-align: right;">
-openssh with pkcs11-uri for cygwin 2022-09-22
+<div align="right">
+openssh with pkcs11-uri for cygwin 2022-09-22<br>
+added openssh-9.2p1-1 with pkcs11-uri for cygwin 2023-03-11
 </div>
 
 # PKCS#11 URIs を扱える ssh を Cygwin に導入する
@@ -142,6 +143,67 @@ $ cygport openssh.cygport compile
 ~~~
 $ [ -d /usr/local/OpenSSH ] && rm -r /usr/local/OpenSSH
 $ cd openssh-9.0p1-1.x86_64/build/
+$ make install
+$ ln -s /usr/local/OpenSSH/bin/ssh.exe /usr/local/OpenSSH/bin/slogin
+$ ln -s /usr/local/OpenSSH/share/man/man1/ssh.1 /usr/local/OpenSSH/share/man/man1/slogin.1
+$ cd ../src/openssh-portable/contrib/cygwin/
+$ make cygwin-postinstall prefix=/usr/local/OpenSSH sysconfdir=/usr/local/OpenSSH/etc PRIVSEP_PATH=/usr/local/OpenSSH/var/empty
+~~~
+
+# PKCS#11 URIs を扱える openssh-9.2p1-1 を Cygwin に導入する
+
+Cygwin のソースパッケージ `openssh-9.2p1-1-src.tar.xz` には `openssh-9.0p1-1-src.tar.xz` にあった Cygwin 用パッチがありません（関係者の仕事に敬意を表します）。その為、**pkcs11-uri パッチのみの適用**になります。
+
+ここでは pkcs11-uri パッチとして `openssh-8.0p1-pkcs11-uri.for.openssh-9.2p1-1.patch` を用意しました。これは `Fedora openssh-9.0p1-2.fc38` の pkcs11-uri パッチを `Cygwin openssh-9.2p1-1` に適用した際に生じる offset がゼロになるようにしたものです。Makefile.in で二つの fuzz が出ますので、その内容を確認します。
+
+<sub>※ 2023-03-11 時点で Fedora Rawhide に同梱されている Fedora openssh-9.0p1-12.fc39.1 の pkcs11-uri パッチは、Fedora openssh-9.0p1-2.fc38 と同じです。</sub>
+
+## 導入手順
+<sub>※ 以下、ソースパッケージ等のバージョンは 2023-03-11 時点のものです。</sub>
+
+### Cygwin の OpenSSH ソースパッケージを入手
+`openssh-9.2p1-1-src.tar.xz` を入手します。
+
+### Fedora の pkcs11-uri パッチの入手
+[上記手順](https://github.com/nosukeg/openssh-with-pkcs11-uri-for-cygwin#fedora-%E3%81%AE-pkcs11-uri-%E3%83%91%E3%83%83%E3%83%81%E3%81%AE%E5%85%A5%E6%89%8B)に倣って、もしくは、ここにある `openssh-8.0p1-pkcs11-uri.for.openssh-9.2p1-1.patch` を入手します。
+
+### パッチの適用
+**Cygwin ソースパッケージ（`openssh-9.2p1-1-src.tar.xz`）を展開します。**
+~~~
+$ [ -d openssh-9.2p1-1.src ] && rm -r openssh-9.2p1-1.src
+$ tar Jxf openssh-9.2p1-1-src.tar.xz
+$ cd openssh-9.2p1-1.src/
+~~~
+
+**pkcs11-uri パッチを適用した openssh-portable-9.2p1.tar.bz2 を作成します（以下は `openssh-8.0p1-pkcs11-uri.for.openssh-9.2p1-1.patch` で行った例です）。**
+- openssh-8.0p1-pkcs11-uri.for.openssh-9.2p1-1.patch
+~~~
+$ tar jxf openssh-portable-9.2p1.tar.bz2
+$ cd openssh-portable/
+$ patch -p1 < /path/to/openssh-8.0p1-pkcs11-uri.for.openssh-9.2p1-1.patch
+$ cd ../
+$ rm openssh-portable-9.2p1.tar.bz2
+$ tar jcf openssh-portable-9.2p1.tar.bz2 openssh-portable
+$ rm -r openssh-portable
+~~~
+
+### インストール先の変更と pkcs11-provider（p11-kit-proxy.so）の指定
+- openssh-9.2p1-1.cygport.patch
+~~~
+$ patch < /path/to/openssh-9.2p1-1.cygport.patch
+~~~
+
+### cygport の実行
+~~~
+$ cygport openssh.cygport prep
+$ cygport openssh.cygport compile
+~~~
+
+### /usr/local/OpenSSH への配置
+※ 配置後、/usr/local/OpenSSH/bin、/usr/local/OpenSSH/share/man へ PATH を通し ssh コマンドを利用します。
+~~~
+$ [ -d /usr/local/OpenSSH ] && rm -r /usr/local/OpenSSH
+$ cd openssh-9.2p1-1.x86_64/build/
 $ make install
 $ ln -s /usr/local/OpenSSH/bin/ssh.exe /usr/local/OpenSSH/bin/slogin
 $ ln -s /usr/local/OpenSSH/share/man/man1/ssh.1 /usr/local/OpenSSH/share/man/man1/slogin.1
