@@ -1,6 +1,7 @@
 <div align="right">
 openssh with pkcs11-uri for cygwin 2022-09-22<br>
-added openssh-9.2p1-1 with pkcs11-uri for cygwin 2023-03-11
+added openssh-9.2p1-1 with pkcs11-uri for cygwin 2023-03-11<br>
+added openssh-9.3p1-1 with pkcs11-uri for cygwin 2023-03-22
 </div>
 
 # PKCS#11 URIs を扱える ssh を Cygwin に導入する
@@ -210,6 +211,13 @@ $ ln -s /usr/local/OpenSSH/share/man/man1/ssh.1 /usr/local/OpenSSH/share/man/man
 $ cd ../src/openssh-portable/contrib/cygwin/
 $ make cygwin-postinstall prefix=/usr/local/OpenSSH sysconfdir=/usr/local/OpenSSH/etc PRIVSEP_PATH=/usr/local/OpenSSH/var/empty
 ~~~
+
+# PKCS#11 URIs を扱える openssh-9.3p1-1 を Cygwin に導入する
+
+内容、手順は openssh-9.2p1-1 に倣います。パッチとして次の2ファイルを用意しました。
+
+- `openssh-8.0p1-pkcs11-uri.for.openssh-9.3p1-1.patch`
+- `openssh-9.3p1-1.cygport.patch`
 
 # マイナンバーカード内のユーザ認証用鍵でリモートへ接続してみる
 - ユーザ認証用公開鍵を取り出します（取り出し方は[こちら](https://github.com/nosukeg/cygwin-install-bat-for-opensc#ssh-%E5%85%AC%E9%96%8B%E9%8D%B5%E8%AA%8D%E8%A8%BC%E3%81%AE%E6%BA%96%E5%82%99)に例があります）。
