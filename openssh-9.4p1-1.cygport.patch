@@ -1,0 +1,26 @@
+diff -up openssh.cygport.orig openssh.cygport
+--- openssh.cygport.orig	2022-08-08 11:48:00.046126700 +0900
++++ openssh.cygport	2022-08-08 11:56:52.510127100 +0900
+@@ -16,7 +16,21 @@ PATCH_URI="0001-compat-code-for-fido_dev
+ 
+ inherit git
+ 
+-CYGCONF_ARGS="--libexecdir=/usr/sbin \
++CYGCONF_ARGS="--prefix=/usr/local/OpenSSH \
++	      --exec_prefix=/usr/local/OpenSSH \
++	      --libexecdir=/usr/local/OpenSSH/sbin \
++	      \
++	      --sysconfdir=/usr/local/OpenSSH/etc \
++	      --localstatedir=/usr/local/OpenSSH/var \
++	      --with-privsep-path=/usr/local/OpenSSH/var/empty \
++	      \
++	      --datarootdir=/usr/local/OpenSSH/share \
++	      --docdir=/usr/local/OpenSSH/share/doc/openssh \
++	      --htmldir=/usr/local/OpenSSH/share/doc/openssh/html \
++	      --mandir=/usr/local/OpenSSH/share/man \
++	      \
++	      --with-default-pkcs11-provider=/usr/lib/p11-kit-proxy.so
++	      \
+ 	      --with-kerberos5=/usr \
+ 	      --with-libedit \
+ 	      --with-xauth=/usr/bin/xauth \

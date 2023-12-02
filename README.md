@@ -1,7 +1,8 @@
 <div align="right">
 openssh with pkcs11-uri for cygwin 2022-09-22<br>
 added openssh-9.2p1-1 with pkcs11-uri for cygwin 2023-03-11<br>
-added openssh-9.3p1-1 with pkcs11-uri for cygwin 2023-03-22
+added openssh-9.3p1-1 with pkcs11-uri for cygwin 2023-03-22<br>
+added openssh-9.4p1-1 with pkcs11-uri for cygwin 2023-12-01
 </div>
 
 # PKCS#11 URIs を扱える ssh を Cygwin に導入する
@@ -218,6 +219,23 @@ $ make cygwin-postinstall prefix=/usr/local/OpenSSH sysconfdir=/usr/local/OpenSS
 
 - `openssh-8.0p1-pkcs11-uri.for.openssh-9.3p1-1.patch`
 - `openssh-9.3p1-1.cygport.patch`
+
+# PKCS#11 URIs を扱える openssh-9.4p1-1 を Cygwin に導入する
+
+内容、手順は openssh-9.2p1-1 に倣います。パッチとして次の2ファイルを用意しました。
+
+<sub>※ 2023-12-01 現在、Fedora には 9.4 に対応したリリースがありません。</sub><br>
+<sub>※ その為、上記 9.3 用のパッチを 9.4 に適用できるように変更しています。</sub><br>
+<sub>※ 変更に際して生じる offset をゼロにしたところで、Makefile.in で 二つ、ssh-agent.c で一つの fuzz が出ます。今回はこの fuzz を修正しています。</sub><br>
+<sub>※ 又、ssh-pkcs11-client.c Hunk #1、ssh-pkcs11.c Hunk #48 が失敗しますので、それも修正しています。</sub><br>
+<sub>※ sh-pkcs11-client.c Hunk #1 は pkcs11_add_provider() の先頭へ debug_f() を挿入するパッチでした。</sub><br>
+<sub>※ ssh-pkcs11.c Hunk #48 はそのような単純なものではありませんでしたが、処理の意味を解釈せずに、字面で合わせ込んでいます。</sub><br>
+<sub>※ 以上で、**私の利用範囲では不具合は無いようですが、その他の確認はしていません**。</sub><br>
+<sub>※ 加えて、configure の際に、zlib のバージョンチェックがエラーとなり、失敗します。</sub><br>
+<sub>※ これは zlib のバージョンが a.b.c となっている事を前提にチェックしていることが原因（現在のバージョンは 1.3）でしたので、configure.ac に a.b でもチェックが通るような修正を入れています。</sub><br>
+
+- `openssh-8.0p1-pkcs11-uri.for.openssh-9.4p1-1.patch`
+- `openssh-9.4p1-1.cygport.patch`
 
 # マイナンバーカード内のユーザ認証用鍵でリモートへ接続してみる
 - ユーザ認証用公開鍵を取り出します（取り出し方は[こちら](https://github.com/nosukeg/cygwin-install-bat-for-opensc#ssh-%E5%85%AC%E9%96%8B%E9%8D%B5%E8%AA%8D%E8%A8%BC%E3%81%AE%E6%BA%96%E5%82%99)に例があります）。
